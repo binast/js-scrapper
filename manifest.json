@@ -1,0 +1,30 @@
+{
+
+  "manifest_version": 2,
+  "name": "BinAST Measurements",
+  "version": "1.0",
+
+  "description": "A PIONEER Telemetry experiment designed to measure performance of BinAST. WARNING: This is a PIONEER experiment, not designed for use out of PIONEER. Installing it on your Firefox will absolutely leak private information. You have been warned.",
+
+  "icons": {
+    "48": "icons/pulse.svg",
+    "96": "icons/pulse.svg"
+  },
+
+  "content_scripts": [
+    {
+      "matches": ["*://*.facebook.com/*", "*://*.instagram.com/*"],
+      "js": ["binast.js"],
+      "all_frames": true,
+      "run_at": "document_start"
+    }
+  ],
+
+  "background-scripts": [
+    "binast-service.js"
+  ],
+
+  "permissions": [
+    "telemetry"
+  ]
+}
