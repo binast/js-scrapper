@@ -1,3 +1,4 @@
+// A console-like API that prints its output using notifications.
 var konsole = {
     log: (...args) => {
         browser.notifications.create({
@@ -15,11 +16,11 @@ var konsole = {
     }
 }
 
-browser.notifications.create({
-    "type": "basic",
-    "title": "Scrap",
-    "message": "scrap is starting",
-});
+konsole.log("Scrap is starting.", "All your JS will be downloaded.");
+
+// A set of downloaded data. Used to avoid downloading the same file
+// more than once.
+var downloaded = new Set();
 
 // We wish to be informed of the load of all scripts.
 browser.webRequest.onCompleted.addListener(onResourceLoadComplete,
@@ -31,6 +32,12 @@ browser.webRequest.onCompleted.addListener(onResourceLoadComplete,
 
 function onResourceLoadComplete(details) {
     let url = details.url;
+    if (downloaded.has(url)) {
+        // Skip duplicates.
+        return;
+    }
+    downloaded.add(url);
+
     konsole.log("scrap", "Downloading", url);
     browser.downloads.download({
         filename: "scrap/" + escape(url),
