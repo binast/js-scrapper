@@ -22,6 +22,22 @@ konsole.log("Scrap is starting.", "All your JS will be downloaded.");
 // more than once.
 var downloaded = new Set();
 
+var pathPrefix = (function() {
+    var date = new Date();
+    var year = "" + date.getFullYear();
+    var month = "" + (date.getMonth() + 1);
+    if (month.length < 2) {
+        month = "0" + month;
+    }
+    var day = "" + date.getDate();
+    if (day.length < 2) {
+        day = "0" + day;
+    }
+    var yyyymmdd = year + month + day;
+    return "scrap/" + yyyymmdd + "/";
+})();
+
+
 // We wish to be informed of the load of all scripts.
 browser.webRequest.onCompleted.addListener(onResourceLoadComplete,
     {
@@ -40,7 +56,7 @@ function onResourceLoadComplete(details) {
 
     konsole.log("scrap", "Downloading", url);
     browser.downloads.download({
-        filename: "scrap/" + escape(url),
+        filename: pathPrefix + escape(url),
         method: details.method,
         saveAs: false,
         url
